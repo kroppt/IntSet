@@ -24,12 +24,20 @@ func NewSetInit(i int) (ns Set) {
 	return ns
 }
 
-// Add creates a copy of the set and adds the integer if new to set
+// Add inserts the given integer into the set if it does not already exist
 func (s Set) Add(i int) {
 	if s.Contains(i) {
 		return
 	}
 	s.add(i)
+}
+
+// Remove deletes the given integer from the set if it exists
+func (s Set) Remove(i int) {
+	if !s.Contains(i) {
+		return
+	}
+	delete(s.m, i)
 }
 
 // Union merges the second set onto the first and returns whether the set changed
@@ -69,7 +77,26 @@ func (s Set) Contains(i int) bool {
 
 // IsEmpty returns true if the set size is zero
 func (s Set) IsEmpty() bool {
-	return len(s.m) == 0
+	return s.Size() == 0
+}
+
+// Size returns the number of items in the set
+func (s Set) Size() int {
+	return len(s.m)
+}
+
+// Equals returns whether the sets are equal
+func (s Set) Equals(os Set) bool {
+	if s.Size() != os.Size() {
+		return false
+	}
+	equal := true
+	s.Range(func(i int) {
+		if !os.Contains(i) {
+			equal = true
+		}
+	})
+	return equal
 }
 
 // Print returns a string representation of the set
