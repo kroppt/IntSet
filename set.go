@@ -93,7 +93,7 @@ func (s Set) Equals(os Set) bool {
 	equal := true
 	s.Range(func(i int) {
 		if !os.Contains(i) {
-			equal = true
+			equal = false
 		}
 	})
 	return equal
