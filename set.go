@@ -63,9 +63,11 @@ func (s Set) Copy() (ns Set) {
 }
 
 // Range executes the ranging function for each element
-func (s Set) Range(f func(int)) {
+func (s Set) Range(f func(int) bool) {
 	for i := range s.m {
-		f(i)
+		if !f(i) {
+			break
+		}
 	}
 }
 
@@ -91,10 +93,12 @@ func (s Set) Equals(os Set) bool {
 		return false
 	}
 	equal := true
-	s.Range(func(i int) {
+	s.Range(func(i int) bool {
 		if !os.Contains(i) {
 			equal = false
+			return false
 		}
+		return true
 	})
 	return equal
 }
